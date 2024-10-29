@@ -1,12 +1,16 @@
 import sys
-
+import sys
+import App.logic as lg
+from tabulate import tabulate
+from datetime import datetime
 
 def new_logic():
     """
         Se crea una instancia del controlador
     """
     #TODO: Llamar la función de la lógica donde se crean las estructuras de datos
-    pass
+    return lg.new_logic()
+pass
 
 def print_menu():
     print("Bienvenido")
@@ -23,25 +27,110 @@ def print_menu():
 
 def load_data(control):
     """
-    Carga los datos
-    """
-    #TODO: Realizar la carga de datos
-    pass
+    Carga los datos de los accidentes y muestra el total de accidentes cargados,
+    así como los cinco primeros y cinco últimos accidentes.
+    """    
+    print("Cargando información de los accidentes...")
+    total_accidents, first_five, last_five = lg.load_data(control, "accidents-large.csv")
 
+    print(f"\nTotal de accidentes cargados: {total_accidents}")
+    
+    print("\nPrimeros cinco accidentes cargados:")
+    display_accidents(first_five)
+    
+    print("\nÚltimos cinco accidentes cargados:")
+    display_accidents(last_five)
 
-def print_data(control, id):
+def display_accidents(accidents):
     """
-        Función que imprime un dato dado su ID
+    Muestra la información requerida de un conjunto de accidentes en formato tabular.
     """
-    #TODO: Realizar la función para imprimir un elemento
-    pass
+    table = []
+    for accident in accidents:
+        table.append([
+            accident["id"],
+            accident["start_time"],
+            accident["city"],
+            accident["state"],
+            accident["description"],
+            f"{accident['duration_hours']:.3f}"
+        ])
+    
+    # Usamos tabulate para imprimir los resultados en formato tabular
+    print(tabulate(table, headers=[
+        "ID", "Fecha y Hora de Inicio", "Ciudad", "Estado", "Descripción", "Duración (horas)"
+    ], tablefmt="fancy_grid"))
 
 def print_req_1(control):
     """
-        Función que imprime la solución del Requerimiento 1 en consola
+    Función que imprime la solución del Requerimiento 1 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 1
-    pass
+    # Solicitar las fechas de inicio y fin al usuario
+    start_date = str(input("Ingrese la fecha inicial del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
+    end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
+    
+    # Llamar a la función que obtiene la información de los accidentes
+    total_accidents, accidents_info, height, node_count, element_count = lg.req_1(control, start_date, end_date)
+    
+    # Imprimir el total de accidentes
+    print(f"Total de accidentes en el intervalo de fechas: {total_accidents}")
+    
+    
+    if total_accidents > 10:
+        # Primeros 5 accidentes
+        first_five = accidents_info[:5]
+        last_five = accidents_info[-5:]
+
+        # Tabla para los primeros 5 accidentes
+        print("\nPrimeros 5 accidentes:")
+        table_first_five = []
+        for accident in first_five:
+            table_first_five.append([
+                accident['id'],
+                accident['start_time'],
+                f"{accident['city']} - {accident['state']}",
+                accident['description'][:40],  # limitar la descripción a 40 caracteres
+                f"{accident['duration_hours']:.3f} horas"  # Usar get para evitar KeyError
+            ])
+        
+        headers = ["ID", "Fecha y hora de inicio", "Ciudad y estado", "Descripción", "Duración"]
+        print(tabulate(table_first_five, headers=headers, tablefmt="grid"))
+
+        # Tabla para los últimos 5 accidentes
+        print("\nÚltimos 5 accidentes:")
+        table_last_five = []
+        for accident in last_five:
+            table_last_five.append([
+                accident['id'],
+                accident['start_time'],
+                f"{accident['city']} - {accident['state']}",
+                accident['description'][:40],  # limitar la descripción a 40 caracteres
+                f"{accident['duration_hours']:.3f} horas"  
+            ])
+        
+        print(tabulate(table_last_five, headers=headers, tablefmt="grid"))
+    else:
+        # Si hay 10 o menos accidentes, imprimir todos en una sola tabla
+        print("Lista de accidentes:")
+        table = []
+        for accident in accidents_info:
+            table.append([
+                accident['id'],
+                accident['start_time'],
+                f"{accident['city']} - {accident['state']}",
+                accident['description'][:40],  # limitar la descripción a 40 caracteres
+                f"{accident['duration_hours']:.3f} horas"  
+            ])
+
+        headers = ["ID", "Fecha y hora de inicio", "Ciudad y estado", "Descripción", "Duración"]
+        print(tabulate(table, headers=headers, tablefmt="grid"))
+    
+    # Imprimir características del árbol
+    print("Características del árbol:")
+    print(f"Altura: {height}")
+    print(f"Número de nodos: {node_count}")
+    print(f"Número de elementos: {element_count}")
+pass
 
 
 def print_req_2(control):
