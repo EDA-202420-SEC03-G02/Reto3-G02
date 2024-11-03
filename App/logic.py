@@ -51,7 +51,7 @@ def load_data(catalog, filename):
         visibility = float(accident["Visibility(mi)"]) if accident["Visibility(mi)"] else None
         wind_direction = accident["Wind_Direction"] if accident["Wind_Direction"] else "Unknown"
         wind_speed = float(accident["Wind_Speed(mph)"]) if accident["Wind_Speed(mph)"] else None
-        precipitation = float(accident["Precipitation(in)"]) if accident["Precipitation(in)"] else None
+        precipitation = float(accident["Precipiation(in)"]) if accident["Precipiation(in)"] else None
         weather_condition = accident["Weather_Condition"] if accident["Weather_Condition"] else "Unknown"
 
         duration_hours = (end_time - start_time).total_seconds() / 3600 if start_time and end_time else None
@@ -371,9 +371,9 @@ def count_accidents(my_rbt):
 
 
 
-def req_5(control, start_date_str, end_date_str, weather_conditions):
+def req_5(catalog, start_date_str, end_date_str, weather_conditions):
     # Obtiene el árbol de accidentes desde el control
-    my_rbt = control['accidents_tree']
+    my_rbt = catalog['accidents_tree']
     
     # Convierte las cadenas de fecha a objetos datetime
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
@@ -409,7 +409,7 @@ def req_5(control, start_date_str, end_date_str, weather_conditions):
         
         # Filtrar accidentes según las condiciones y las fechas
         for accident_id in accidents_list:
-            accident_data = get_data(control, accident_id)  # Obtiene los datos del accidente
+            accident_data = get_data(catalog, accident_id)  # Obtiene los datos del accidente
           
             
             # Verifica que los datos del accidente sean válidos
@@ -477,24 +477,116 @@ def get_all_accidents(my_rbt):
     traverse_tree(my_rbt['root'])  # Comenzar desde la raíz
     return accidents
 
-
-
 def req_6(catalog,start_date_str, end_date_str,Humidity,condado):
+    
+    
+    
+    
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
     pass
+def traverse_tree(node, min_lat, max_lat, min_long, max_long, accidents_in_range):
+    """
+    Realiza un recorrido en orden del árbol rojo-negro y agrega los accidentes dentro del rango geográfico
+    especificado a la lista `accidents_in_range`.
+    
+    Parámetros:
+    - node: el nodo actual del árbol (inicia con el nodo raíz).
+    - min_lat, max_lat: rango de latitud.
+    - min_long, max_long: rango de longitud.
+    - accidents_in_range: lista para almacenar los accidentes en el rango.
+    """
+    if node is None:
+        return  # Caso base: si el nodo es None, termina la recursión
+
+    # Recorrido en orden (izquierda - nodo - derecha)
+
+    # 1. Visitar el subárbol izquierdo
+    traverse_tree(node['left'], min_lat, max_lat, min_long, max_long, accidents_in_range)
+    
+    # 2. Procesar el nodo actual (si tiene datos de accidente)
+    accident_data = node['value']
+    if accident_data is not None:
+        start_lat = accident_data.get('start_lat', 0)
+        start_lng = accident_data.get('start_lng', 0)  # Asegurado de coincidir con la carga de datos
+
+        # Comprobar si el accidente está dentro del rango de latitud y longitud
+        if min_lat <= start_lat <= max_lat and min_long <= start_lng <= max_long:
+            # Recopilar información del accidente
+            accident_info = {
+                "accident_id": accident_data.get('id', ''),
+                "start_time": accident_data.get('start_time', datetime.now()),
+                "city": accident_data.get('city', 'N/A'),
+                "state": accident_data.get('state', 'N/A'),
+                "description": accident_data.get('description', '')[:40],  # Limitar a 40 caracteres
+                "duration_hours": accident_data.get('duration_hours', 0),
+                "start_lat": start_lat,
+                "start_lng": start_lng
+            }
+            accidents_in_range.append(accident_info)  # Agregar el accidente a la lista
+
+    # 3. Visitar el subárbol derecho
+    traverse_tree(node['right'], min_lat, max_lat, min_long, max_long, accidents_in_range)
 
 
-def req_7(catalog):
+def count_nodes_in_tree(node):
     """
-    Retorna el resultado del requerimiento 7
+    Cuenta los nodos en un árbol rojo-negro, comenzando desde el nodo dado.
+    
+    Parámetro:
+    - node: el nodo actual del árbol
+    
+    Retorna:
+    - La cantidad total de nodos en el árbol.
     """
-    # TODO: Modificar el requerimiento 7
+    if node is None:
+        return 0
+    # Contar el nodo actual y luego contar en sus hijos izquierdo y derecho
+    return 1 + count_nodes_in_tree(node['left']) + count_nodes_in_tree(node['right'])
+
+def req_7(catalog, min_lat, max_lat, min_long, max_long):
+    """
+    Obtiene los accidentes en un rango geográfico y retorna una selección de ellos.
+    
+    Parámetros:
+    - catalog: diccionario que contiene el árbol de accidentes ('accidents_tree')
+    - min_lat, max_lat: rango de latitud
+    - min_long, max_long: rango de longitud
+    
+    Retorna:
+    - Diccionario con el total de accidentes en el rango y la lista de accidentes seleccionados.
+    """
+    # Lista para almacenar los accidentes encontrados en el rango
+    accidents_in_range = []
+    
+    # Obtener el árbol de accidentes desde el catálogo
+    accidents_tree = catalog.get('accidents_tree')
+    
+    # Realizar el recorrido del árbol en busca de accidentes en el rango
+    traverse_tree(accidents_tree['root'], min_lat, max_lat, min_long, max_long, accidents_in_range)
+    
+    # Calcular el total de accidentes en el rango
+    total_accidents_in_range = len(accidents_in_range)
+    
+    # Seleccionar una muestra (por ejemplo, los primeros 5 accidentes) para mostrar
+    selected_accidents = accidents_in_range[:5] if accidents_in_range else []
+    
+    # Retornar el total y la muestra de accidentes
+    return {
+        "total_accidents_in_range": total_accidents_in_range,
+        "accidents": selected_accidents
+    }
+
+
+
+
+
+
     pass
 
-
+ 
 def req_8(catalog):
     """
     Retorna el resultado del requerimiento 8

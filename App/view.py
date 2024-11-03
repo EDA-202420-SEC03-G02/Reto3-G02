@@ -274,10 +274,37 @@ def print_req_6(control):
 
 def print_req_7(control):
     """
-        Función que imprime la solución del Requerimiento 7 en consola
+    Función que imprime la solución del Requerimiento 7 en consola.
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    # Solicitar los límites geográficos
+    min_lat = float(input("Ingrese la latitud mínima: "))
+    max_lat = float(input("Ingrese la latitud máxima: "))
+    min_long = float(input("Ingrese la longitud mínima: "))
+    max_long = float(input("Ingrese la longitud máxima: "))
+    
+    # Llamar a la función req_7 con los límites geográficos
+    result = lg.req_7(control, min_lat, max_lat, min_long, max_long)
+    
+    # Imprimir el conteo total de accidentes en el rango
+    print("Total de accidentes en el rango geográfico:", result["total_accidents_in_range"])
+    
+    # Imprimir los detalles de cada accidente en el rango
+    print("\nLista de accidentes:")
+    for accident in result["accidents"]:
+        accident_id = accident["accident_id"]
+        start_time = accident["start_time"]
+        city = accident["city"]
+        state = accident["state"]
+        description = accident["description"]
+        duration_hours = accident["duration_hours"]
+        
+        print("----------------------------------------")
+        print(f"ID del accidente: {accident_id}")
+        print(f"Fecha y hora de inicio: {start_time}")
+        print(f"Ciudad: {city}, Estado: {state}")
+        print(f"Descripción: {description}")
+        print(f"Duración del accidente (horas): {duration_hours}")
+    print("----------------------------------------")
 
 
 def print_req_8(control):
