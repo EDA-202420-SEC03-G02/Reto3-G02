@@ -608,4 +608,20 @@ def values_range_tree(node, key_initial, key_final, result):
     if key_final > node["key"]:
         values_range_tree(node["right"], key_initial, key_final, result)
 
+def diametro(my_rbt, node):
+    """
+    Calcula el diámetro del árbol rojo-negro y el camino correspondiente.
+     dict: Un diccionario con el diámetro y el camino correspondiente
+    """
+    if my_rbt["root"] is None:
+        return {"diameter": 0, "path": []}
+    diam={"diameter": 0, "path": []}
+    
+    node= my_rbt["root"]
+    izq=  height_tree(node["left"])
+    der=  height_tree(node["right"])
+    
+    if izq>der:
+        izq
+    
 

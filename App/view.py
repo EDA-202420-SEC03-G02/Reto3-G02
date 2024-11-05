@@ -151,10 +151,54 @@ def print_req_3(control):
 
 def print_req_4(control):
     """
-        Función que imprime la solución del Requerimiento 4 en consola
+    Función que imprime la solución del Requerimiento 4 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    # Solicitar las fechas de inicio y fin al usuario
+    start_date = str(input("Ingrese la fecha inicial del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
+    end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
+    
+    # Llamar a la función que obtiene la información de las vías y accidentes
+    total_accidents, roads_info, height, node_count, element_count = lg.req_4(control, start_date, end_date)
+    
+    # Verificar si se obtuvo información
+    if not roads_info:
+        print("No se encontraron datos para el intervalo de fechas proporcionado.")
+        return
+    
+    # Crear una tabla para mostrar la información de las vías
+    table = []
+    for road in roads_info["elements"]:
+        table.append([
+            road['street'],  # Nombre de la vía
+            road['city'],    # Ciudad
+            road['county'],  # Condado
+            road['state'],   # Estado
+            (road['number_severity_3'] + road['number_severity_4']) / (road['number_severity_3'] + road['number_severity_4']) if (road['number_severity_3'] + road['number_severity_4']) > 0 else 0,  # Peligrosidad promedio
+            road['number_severity_3'],  # Total de accidentes severidad 3
+            road['number_severity_4'],  # Total de accidentes severidad 4
+            road['Average_visibility']  # Visibilidad promedio
+        ])
+    
+    # Definir los encabezados de la tabla
+    headers = [
+        "Nombre de la vía", 
+        "Ciudad", 
+        "Condado", 
+        "Estado", 
+        "Peligrosidad Promedio", 
+        "Total Accidentes Severidad 3", 
+        "Total Accidentes Severidad 4", 
+        "Visibilidad Promedio"
+    ]
+    
+    # Imprimir la tabla
+    print(tabulate(table, headers=headers, tablefmt="grid"))
+
+    # Imprimir características del árbol
+    print("Características del árbol:")
+    print(f"Altura: {height}")
+    print(f"Número de nodos: {node_count}")
+    print(f"Número de elementos: {element_count}")
 
 
 def print_req_5(control):
@@ -167,10 +211,62 @@ def print_req_5(control):
 
 def print_req_6(control):
     """
-        Función que imprime la solución del Requerimiento 6 en consola
+    Función que imprime la solución del Requerimiento 6 en consola
     """
-    # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    # Solicitar las fechas de inicio y fin al usuario
+    start_date = str(input("Ingrese la fecha inicial del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
+    end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
+    humedad = float(input("Ingrese el nivel mínimo de humedad (en %): "))
+    lst_condados = input("Ingrese la lista de condados separados por comas: ").split(",")
+    
+    # Llamar a la función que obtiene la información de los accidentes
+    total_accidents, counties_info, height, node_count, element_count = lg.req_6(control, start_date, end_date, humedad, lst_condados)
+    
+    # Verificar si se obtuvo información
+    if not counties_info:
+        print("No se encontraron datos para el intervalo de fechas y condiciones proporcionadas.")
+        return
+    
+    # Crear una tabla para mostrar la información de los condados
+    table = []
+    for county_data in counties_info["elements"]:
+        table.append([
+            county_data['county'],  # Condado
+            county_data['Accidents_county'],  # Número de accidentes en el condado
+            county_data['Average_temperature'],  # Temperatura promedio
+            county_data['Average_humidity'],  # Humedad promedio
+            county_data['Average_wind_speed'],  # Velocidad del viento promedio
+            county_data['Average_distance'],  # Distancia promedio
+            county_data['id'],  # ID del accidente más severo
+            county_data['temperature(f)'],  # Temperatura del accidente más severo
+            county_data['humidity(%)'],  # Humedad del accidente más severo
+            county_data['distance(mi)'],  # Distancia del accidente más severo
+            county_data['description']  # Descripción del accidente más severo
+        ])
+    
+    # Definir los encabezados de la tabla
+    headers = [
+        "Condado", 
+        "Número de Accidentes", 
+        "Temperatura Promedio (°F)", 
+        "Humedad Promedio (%)", 
+        "Velocidad del Viento Promedio (mph)", 
+        "Distancia Promedio (mi)", 
+        "ID del Accidente Más Severo", 
+        "Temperatura del Accidente Más Severo (°F)", 
+        "Humedad del Accidente Más Severo (%)", 
+        "Distancia del Accidente Más Severo (mi)", 
+        "Descripción del Accidente Más Severo"
+    ]
+    
+    # Imprimir la tabla
+    print(tabulate(table, headers=headers, tablefmt="grid"))
+
+    # Imprimir características del árbol
+    print("Características del árbol:")
+    print(f"Altura: {height}")
+    print(f"Número de nodos: {node_count}")
+    print(f"Número de elementos: {element_count}")
 
 
 def print_req_7(control):
