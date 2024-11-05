@@ -31,7 +31,7 @@ def load_data(control):
     así como los cinco primeros y cinco últimos accidentes.
     """    
     print("Cargando información de los accidentes...")
-    total_accidents, first_five, last_five = lg.load_data(control, "accidents-large.csv")
+    total_accidents, first_five, last_five = lg.load_data(control, "accidents-small.csv")
 
     print(f"\nTotal de accidentes cargados: {total_accidents}")
     
@@ -135,17 +135,96 @@ pass
 
 def print_req_2(control):
     """
-        Función que imprime la solución del Requerimiento 2 en consola
+    Función que imprime la solución del Requerimiento 2 en consola.
     """
-    # TODO: Imprimir el resultado del requerimiento 2
+    # Solicitar el rango de visibilidad al usuario
+    visibilidad_min = float(input("Ingrese el límite inferior del rango de visibilidad en millas: "))
+    visibilidad_max = float(input("Ingrese el límite superior del rango de visibilidad en millas: "))
+    visibilidad_rango = (visibilidad_min, visibilidad_max)
+
+    # Solicitar la lista de estados al usuario
+    lista_estados_input = input("Ingrese la lista de estados separados por comas (por ejemplo, CA,NY,TX): ")
+    lista_estados = [estado.strip() for estado in lista_estados_input.split(",") if estado.strip()]
+
+    if not lista_estados:
+        print("Error: Debe ingresar al menos un estado.")
+        return
+
+    # Llamar a la función que obtiene la información de los accidentes
+    resultados = lg.req_2(control, visibilidad_rango, lista_estados)
+
+    # Imprimir el total de accidentes
+    total_accidentes = sum(estado["Total Accidentes"] for estado in resultados)
+    print(f"Total de accidentes graves en el rango de visibilidad {visibilidad_rango}: {total_accidentes}")
+    print("=" * 80)
+
+    # Imprimir el análisis por estado en tablas
+    for estado in resultados:
+        print(f"Estado: {estado['Estado']}")
+        
+        # Información general de accidentes en el estado
+        table_estado = [
+            [
+                estado["Total Accidentes"],
+                f"{estado['Visibilidad Promedio']:.2f} millas",
+                f"{estado['Distancia Promedio']:.2f} millas"
+            ]
+        ]
+        headers_estado = ["Total Accidentes", "Visibilidad Promedio", "Distancia Promedio"]
+        print(tabulate(table_estado, headers=headers_estado, tablefmt="grid"))
+
+        # Información del accidente con mayor distancia afectada
+        accidente_mayor_distancia = estado["Accidente Mayor Distancia"]
+        table_accidente = [
+            [
+                accidente_mayor_distancia['ID'],
+                accidente_mayor_distancia['Fecha de Inicio'],
+                accidente_mayor_distancia['Visibilidad'],
+                accidente_mayor_distancia['Distancia']
+            ]
+        ]
+        headers_accidente = ["ID", "Fecha de Inicio", "Visibilidad", "Distancia Afectada"]
+        print("\nAccidente con mayor distancia afectada:")
+        print(tabulate(table_accidente, headers=headers_accidente, tablefmt="grid"))
+        print("-" * 80)
+
+    print("Fin del análisis")
+
+    
+
     pass
 
 
 def print_req_3(control):
     """
-        Función que imprime la solución del Requerimiento 3 en consola
+    Función que imprime la solución del Requerimiento 3 en consola.
     """
-    # TODO: Imprimir el resultado del requerimiento 3
+    n = int(input("Ingrese el número N de accidentes a mostrar: "))
+    total_accidentes, respuesta, height, node_count, element_count = lg.req_3(control, n) 
+
+    # Imprimir total de accidentes encontrados
+    print(f"Total de accidentes encontrados: {total_accidentes}")
+    print("\nAccidentes más recientes y severos con visibilidad menor a 2 millas y precipitaciones:")
+
+    # Verificar y mostrar cada accidente en respuesta
+    for accidente in respuesta:
+        if isinstance(accidente, dict):  # Asegura que accidente es un diccionario
+            print(f"ID: {accidente.get('id', 'N/A')}, "
+                  f"Fecha de Inicio: {accidente.get('start_time', 'N/A')}, "
+                  f"Ciudad: {accidente.get('city', 'N/A')}, "
+                  f"Estado: {accidente.get('state', 'N/A')}, "
+                  f"Descripción: {accidente.get('description', 'N/A')[:40]}, "
+                  f"Duración (horas): {accidente.get('duration_hours', 'N/A')}")
+        else:
+            print("Error: El formato de accidente no es un diccionario. Valor encontrado:", accidente)
+
+    # Imprimir características del árbol
+    print("\nCaracterísticas del árbol rojo-negro:")
+    print(f"Altura del árbol: {height}")
+    print(f"Número de nodos en el árbol: {node_count}")
+    print(f"Cantidad de elementos en el árbol: {element_count}")
+
+
     pass
 
 
@@ -203,10 +282,30 @@ def print_req_4(control):
 
 def print_req_5(control):
     """
-        Función que imprime la solución del Requerimiento 5 en consola
+    Función que imprime la solución del Requerimiento 5 en consola.
     """
-    # TODO: Imprimir el resultado del requerimiento 5
-    pass
+    # Solicitar las fechas de inicio y fin al usuario
+    start_date = str(input("Ingrese la fecha inicial del período a consultar (formato %Y-%m-%d): "))
+    end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d): "))
+    
+    # Solicitar las condiciones climáticas
+    weather_conditions_input = input("Ingrese las condiciones climáticas separadas por comas (ejemplo: niebla, lluvia): ")
+    # Convertir la entrada de condiciones climáticas en una lista
+    weather_conditions = [condition.strip() for condition in weather_conditions_input.split(",")]
+    
+    # Llamar a la función que obtiene la información de los accidentes
+    results, height, node_count, element_count = lg.req_5(control, start_date, end_date, weather_conditions)
+    
+    # Imprimir resultados
+    print("\nResultados del Requerimiento 5:")
+    for result in results:
+        # Asegúrate de que result sea un diccionario
+        print(f"Franja Horaria: {result['time_slot']}")
+        print(f"Número total de accidentes graves: {result['total_accidents']}")
+        print(f"Promedio de severidad: {result['average_severity']:.2f}")
+        print(f"Condición climática predominante: {result['predominant_weather']}")
+        print("-" * 40)
+
 
 
 def print_req_6(control):
@@ -271,10 +370,37 @@ def print_req_6(control):
 
 def print_req_7(control):
     """
-        Función que imprime la solución del Requerimiento 7 en consola
+    Función que imprime la solución del Requerimiento 7 en consola.
     """
-    # TODO: Imprimir el resultado del requerimiento 7
-    pass
+    # Solicitar los límites geográficos
+    min_lat = float(input("Ingrese la latitud mínima: "))
+    max_lat = float(input("Ingrese la latitud máxima: "))
+    min_long = float(input("Ingrese la longitud mínima: "))
+    max_long = float(input("Ingrese la longitud máxima: "))
+    
+    # Llamar a la función req_7 con los límites geográficos
+    result = lg.req_7(control, min_lat, max_lat, min_long, max_long)
+    
+    # Imprimir el conteo total de accidentes en el rango
+    print("Total de accidentes en el rango geográfico:", result["total_accidents_in_range"])
+    
+    # Imprimir los detalles de cada accidente en el rango
+    print("\nLista de accidentes:")
+    for accident in result["accidents"]:
+        accident_id = accident["accident_id"]
+        start_time = accident["start_time"]
+        city = accident["city"]
+        state = accident["state"]
+        description = accident["description"]
+        duration_hours = accident["duration_hours"]
+        
+        print("----------------------------------------")
+        print(f"ID del accidente: {accident_id}")
+        print(f"Fecha y hora de inicio: {start_time}")
+        print(f"Ciudad: {city}, Estado: {state}")
+        print(f"Descripción: {description}")
+        print(f"Duración del accidente (horas): {duration_hours}")
+    print("----------------------------------------")
 
 
 def print_req_8(control):
