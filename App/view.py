@@ -206,24 +206,33 @@ def print_req_3(control):
     print(f"Total de accidentes encontrados: {total_accidentes}")
     print("\nAccidentes más recientes y severos con visibilidad menor a 2 millas y precipitaciones:")
 
-    # Verificar y mostrar cada accidente en respuesta
-    for accidente in respuesta:
-        if isinstance(accidente, dict):  # Asegura que accidente es un diccionario
-            print(f"ID: {accidente.get('id', 'N/A')}, "
-                  f"Fecha de Inicio: {accidente.get('start_time', 'N/A')}, "
-                  f"Ciudad: {accidente.get('city', 'N/A')}, "
-                  f"Estado: {accidente.get('state', 'N/A')}, "
-                  f"Descripción: {accidente.get('description', 'N/A')[:40]}, "
-                  f"Duración (horas): {accidente.get('duration_hours', 'N/A')}")
-        else:
-            print("Error: El formato de accidente no es un diccionario. Valor encontrado:", accidente)
+    # Crear la tabla para los accidentes
+    accidentes_tabla = [
+        [
+            accidente.get('id', 'N/A'),
+            accidente.get('start_time', 'N/A'),
+            accidente.get('city', 'N/A'),
+            accidente.get('state', 'N/A'),
+            accidente.get('description', 'N/A')[:40],
+            accidente.get('duration_hours', 'N/A')
+        ]
+        for accidente in respuesta if isinstance(accidente, dict)
+    ]
+    
+    # Encabezados para la tabla de accidentes
+    headers_accidentes = ["ID", "Fecha de Inicio", "Ciudad", "Estado", "Descripción", "Duración (horas)"]
+    print(tabulate(accidentes_tabla, headers=headers_accidentes, tablefmt="grid"))
 
-    # Imprimir características del árbol
+    # Crear tabla para las características del árbol
+    tree_stats = [
+        ["Altura del árbol", height],
+        ["Número de nodos en el árbol", node_count],
+        ["Cantidad de elementos en el árbol", element_count]
+    ]
     print("\nCaracterísticas del árbol rojo-negro:")
-    print(f"Altura del árbol: {height}")
-    print(f"Número de nodos en el árbol: {node_count}")
-    print(f"Cantidad de elementos en el árbol: {element_count}")
+    print(tabulate(tree_stats, tablefmt="grid"))
 
+    print("Fin del análisis")
 
     pass
 
@@ -234,6 +243,8 @@ def print_req_4(control):
     """
     # TODO: Imprimir el resultado del requerimiento 4
     pass
+
+
 
 
 def print_req_5(control):
@@ -252,15 +263,33 @@ def print_req_5(control):
     # Llamar a la función que obtiene la información de los accidentes
     results, height, node_count, element_count = lg.req_5(control, start_date, end_date, weather_conditions)
     
-    # Imprimir resultados
+    # Imprimir resultados en tabla
     print("\nResultados del Requerimiento 5:")
-    for result in results:
-        # Asegúrate de que result sea un diccionario
-        print(f"Franja Horaria: {result['time_slot']}")
-        print(f"Número total de accidentes graves: {result['total_accidents']}")
-        print(f"Promedio de severidad: {result['average_severity']:.2f}")
-        print(f"Condición climática predominante: {result['predominant_weather']}")
-        print("-" * 40)
+    results_table = [
+        [
+            result["time_slot"],
+            result["total_accidents"],
+            f"{result['average_severity']:.2f}",
+            result["predominant_weather"]
+        ]
+        for result in results if isinstance(result, dict)
+    ]
+    
+    # Encabezados para la tabla de resultados
+    headers_results = ["Franja Horaria", "Total Accidentes Graves", "Promedio Severidad", "Condición Climática Predominante"]
+    print(tabulate(results_table, headers=headers_results, tablefmt="grid"))
+
+    # Tabla para las características del árbol
+    tree_stats = [
+        ["Altura del árbol", height],
+        ["Número de nodos en el árbol", node_count],
+        ["Cantidad de elementos en el árbol", element_count]
+    ]
+    print("\nCaracterísticas del árbol de accidentes:")
+    print(tabulate(tree_stats, tablefmt="grid"))
+
+    print("Fin del análisis")
+
 
 
 
@@ -270,6 +299,8 @@ def print_req_6(control):
     """
     # TODO: Imprimir el resultado del requerimiento 6
     pass
+
+
 
 
 def print_req_7(control):
@@ -288,23 +319,28 @@ def print_req_7(control):
     # Imprimir el conteo total de accidentes en el rango
     print("Total de accidentes en el rango geográfico:", result["total_accidents_in_range"])
     
-    # Imprimir los detalles de cada accidente en el rango
-    print("\nLista de accidentes:")
-    for accident in result["accidents"]:
-        accident_id = accident["accident_id"]
-        start_time = accident["start_time"]
-        city = accident["city"]
-        state = accident["state"]
-        description = accident["description"]
-        duration_hours = accident["duration_hours"]
-        
-        print("----------------------------------------")
-        print(f"ID del accidente: {accident_id}")
-        print(f"Fecha y hora de inicio: {start_time}")
-        print(f"Ciudad: {city}, Estado: {state}")
-        print(f"Descripción: {description}")
-        print(f"Duración del accidente (horas): {duration_hours}")
-    print("----------------------------------------")
+    # Preparar los detalles de cada accidente en formato de tabla
+    accidents_table = [
+        [
+            accident["accident_id"],
+            accident["start_time"],
+            accident["city"],
+            accident["state"],
+            accident["description"],
+            accident["duration_hours"]
+        ]
+        for accident in result["accidents"]
+    ]
+    
+    # Encabezados para la tabla de accidentes
+    headers = ["ID del Accidente", "Fecha y Hora de Inicio", "Ciudad", "Estado", "Descripción", "Duración (horas)"]
+    
+    # Imprimir la tabla de accidentes
+    print("\nLista de accidentes en el rango geográfico:")
+    print(tabulate(accidents_table, headers=headers, tablefmt="grid"))
+
+    print("Fin del análisis")
+
 
 
 def print_req_8(control):
