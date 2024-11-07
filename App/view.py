@@ -188,7 +188,7 @@ def print_req_2(control):
         print(tabulate(table_accidente, headers=headers_accidente, tablefmt="grid"))
         print("-" * 80)
 
-    print("Fin del análisis")
+    
 
     
 
@@ -232,7 +232,7 @@ def print_req_3(control):
     print("\nCaracterísticas del árbol rojo-negro:")
     print(tabulate(tree_stats, tablefmt="grid"))
 
-    print("Fin del análisis")
+    
 
     pass
 
@@ -332,7 +332,7 @@ def print_req_5(control):
     print("\nCaracterísticas del árbol de accidentes:")
     print(tabulate(tree_stats, tablefmt="grid"))
 
-    print("Fin del análisis")
+    
 
 
 
@@ -435,7 +435,7 @@ def print_req_7(control):
     print("\nLista de accidentes en el rango geográfico:")
     print(tabulate(accidents_table, headers=headers, tablefmt="grid"))
 
-    print("Fin del análisis")
+    
 
 
 
