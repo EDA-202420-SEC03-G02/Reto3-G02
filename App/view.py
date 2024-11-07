@@ -445,6 +445,19 @@ def print_req_8(control):
         Función que imprime la solución del Requerimiento 8 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 8
+   
+    
+    # Obtener las características del árbol desde la función req_8
+    height, node_count, element_count, diametro, time = lg.req_8(control)
+
+    # Imprimir las características del árbol
+    print("Características del árbol:")
+    print(f"Altura: {height}")
+    print(f"Número de nodos: {node_count}")
+    print(f"Número de elementos: {element_count}")
+    print(f"Diámetro del árbol: {diametro}")
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
+
     pass
 
 

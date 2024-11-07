@@ -22,7 +22,8 @@ def load_data(catalog, filename):
     """
     Carga los datos del reto
     """
-    filename="C:\\Users\\dfeli\\Downloads\\Universidad Segundo Semestre\\Estructura De Datos Y Algoritmos\\Retos\\Reto 3\\Reto3-G02\\Data\\accidents-large.csv"
+    filename="C:\\EDA20242\\Reto3-G02\\Data\\Data\\Data\\accidents-large.csv"
+    #"C:\\Users\\dfeli\\Downloads\\Universidad Segundo Semestre\\Estructura De Datos Y Algoritmos\\Retos\\Reto 3\\Reto3-G02\\Data\\accidents-large.csv"
     input_file = csv.DictReader(open(filename, encoding="utf-8"))
     astart_time = get_time()
     accidents_tree = catalog['accidents_tree']  # Obtener el árbol del catálogo
@@ -781,6 +782,18 @@ def req_8(catalog):
     """
     # TODO: Modificar el requerimiento 8
     astart_time = get_time()
+    
+
+    # TODO: Modificar el requerimiento 8
+    my_rbt =catalog['accidents_tree']
+    diametro= rbt.diametro(my_rbt["root"])
+    height = rbt.height_tree(my_rbt["root"])
+    node_count = rbt.size_tree(my_rbt["root"])
+    element_count = rbt.size_tree(my_rbt["root"])
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    
+    return  height, node_count, element_count, diametro, delta
     
     pass
 

@@ -608,20 +608,65 @@ def values_range_tree(node, key_initial, key_final, result):
     if key_final > node["key"]:
         values_range_tree(node["right"], key_initial, key_final, result)
 
-def diametro(my_rbt, node):
-    """
-    Calcula el diámetro del árbol rojo-negro y el camino correspondiente.
-     dict: Un diccionario con el diámetro y el camino correspondiente
-    """
-    if my_rbt["root"] is None:
-        return {"diameter": 0, "path": []}
-    diam={"diameter": 0, "path": []}
+def height_with_nodes(node):
+    if node is None:
+        return {"altura": -1, "patron": []}  # La altura de un árbol vacío es -1, con un patrón vacío
     
-    node= my_rbt["root"]
-    izq=  height_tree(node["left"])
-    der=  height_tree(node["right"])
+    # Inicializar variables de altura y patrón
+    subarbol_izquierda = height_with_nodes(node["left"])
+    subarbol_derecha = height_with_nodes(node["right"])
     
-    if izq>der:
-        izq
+    left_height =subarbol_izquierda["altura"]
+    right_height = subarbol_derecha["altura"]
+
+    # Calcular la altura del nodo actual y actualizar el patrón
+    if left_height > right_height:
+        mayor = left_height + 1
+        patron = subarbol_izquierda["patron"]  # Copiar el patrón del lado izquierdo
+        patron.append(node["key"])  # Agregar el nodo actual al patrón
+    else:
+        mayor = right_height + 1
+        patron = subarbol_derecha["patron"]  # Copiar el patrón del lado derecho
+        patron.append(node["key"])  # Agregar el nodo actual al patrón
+    
+    return {"altura": mayor, "patron": patron}
+
+
+
+def diametro(node):
+    if node is None:
+        return {"diametro": 0, "camino": []}  # El diámetro de un árbol vacío es 0 y el camino es vacío
+
+    # Obtener la altura y camino de los subárboles izquierdo y derecho
+    resultado_izquierdo = height_with_nodes(node["left"])
+    resultado_derecho = height_with_nodes(node["right"])
+
+    # Altura y patrón de los subárboles
+    altura_izquierda = resultado_izquierdo["altura"]
+    altura_derecha = resultado_derecho["altura"]
+    camino_izquierdo = resultado_izquierdo["patron"]
+    camino_derecho = resultado_derecho["patron"]
+
+    # Calcular el diámetro que pasa por la raíz (altura izquierda + altura derecha + 2)
+    diametro_pasa_raiz = altura_izquierda + altura_derecha + 2
+    camino_pasa_raiz = camino_izquierdo[::-1] + [node["key"]] + camino_derecho
+
+    # Calcular el diámetro de los subárboles izquierdo y derecho
+    resultado_diametro_izquierdo = diametro(node["left"])
+    resultado_diametro_derecho = diametro(node["right"])
+
+    diametro_izquierdo = resultado_diametro_izquierdo["diametro"]
+    camino_izquierdo_total = resultado_diametro_izquierdo["camino"]
+
+    diametro_derecho = resultado_diametro_derecho["diametro"]
+    camino_derecho_total = resultado_diametro_derecho["camino"]
+
+    # Comparar los diámetros y seleccionar el mayor junto con su camino
+    if diametro_pasa_raiz >= diametro_izquierdo and diametro_pasa_raiz >= diametro_derecho:
+        return {"diametro": diametro_pasa_raiz, "camino": camino_pasa_raiz}
+    elif diametro_izquierdo >= diametro_derecho:
+        return {"diametro": diametro_izquierdo, "camino": camino_izquierdo_total}
+    else:
+        return {"diametro": diametro_derecho, "camino": camino_derecho_total}
     
 
