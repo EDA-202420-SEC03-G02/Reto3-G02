@@ -31,7 +31,7 @@ def load_data(control):
     así como los cinco primeros y cinco últimos accidentes.
     """    
     print("Cargando información de los accidentes...")
-    total_accidents, first_five, last_five = lg.load_data(control, "accidents-small.csv")
+    total_accidents, first_five, last_five = lg.load_data(control, "accidents-large.csv")
 
     print(f"\nTotal de accidentes cargados: {total_accidents}")
     

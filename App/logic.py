@@ -22,7 +22,7 @@ def load_data(catalog, filename):
     """
     Carga los datos del reto
     """
-    filename="C:\\EDA20242\\Reto3-G02\\Data\\Data\\Data\\accidents-large.csv"
+    filename="C:\\Users\\dfeli\\Downloads\\Universidad Segundo Semestre\\Estructura De Datos Y Algoritmos\\Retos\\Reto 3\\Reto3-G02\\Data\\accidents-large.csv"
     input_file = csv.DictReader(open(filename, encoding="utf-8"))
     accidents_tree = catalog['accidents_tree']  # Obtener el árbol del catálogo
     accidents_list = catalog['accidents_list']["elements"]  # Obtener la lista del catálogo
@@ -50,7 +50,7 @@ def load_data(catalog, filename):
         visibility = float(accident["Visibility(mi)"]) if accident["Visibility(mi)"] else None
         wind_direction = accident["Wind_Direction"] if accident["Wind_Direction"] else "Unknown"
         wind_speed = float(accident["Wind_Speed(mph)"]) if accident["Wind_Speed(mph)"] else None
-        precipitation = float(accident["Precipiation(in)"]) if accident["Precipiation(in)"] else None
+        precipitation = float(accident["Precipitation(in)"]) if accident["Precipitation(in)"] else None
         weather_condition = accident["Weather_Condition"] if accident["Weather_Condition"] else "Unknown"
 
         duration_hours = (end_time - start_time).total_seconds() / 3600 if start_time and end_time else None
