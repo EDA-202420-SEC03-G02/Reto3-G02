@@ -725,19 +725,19 @@ def req_7(catalog, min_lat, max_lat, min_long, max_long):
     - Diccionario con el total de accidentes en el rango y la lista de accidentes seleccionados.
     """
     # Lista para almacenar los accidentes encontrados en el rango
-    accidents_in_range = []
+    accidents_in_range = al.new_list()
     
     # Obtener el árbol de accidentes desde el catálogo
     accidents_tree = catalog.get('accidents_tree')
     
     # Realizar el recorrido del árbol en busca de accidentes en el rango
-    traverse_tree(accidents_tree['root'], min_lat, max_lat, min_long, max_long, accidents_in_range)
+    traverse_tree(accidents_tree['root'], min_lat, max_lat, min_long, max_long, accidents_in_range["elements"])
     
     # Calcular el total de accidentes en el rango
-    total_accidents_in_range = len(accidents_in_range)
+    total_accidents_in_range = accidents_in_range["size"]
     
     # Seleccionar una muestra (por ejemplo, los primeros 5 accidentes) para mostrar
-    selected_accidents = accidents_in_range[:5] if accidents_in_range else []
+    selected_accidents = accidents_in_range["elements"][:5] if accidents_in_range else []
     
     # Retornar el total y la muestra de accidentes
     return {
@@ -750,7 +750,7 @@ def req_7(catalog, min_lat, max_lat, min_long, max_long):
 
 
 
-    pass
+pass
 
  
 def req_8(catalog):
