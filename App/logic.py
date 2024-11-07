@@ -24,6 +24,7 @@ def load_data(catalog, filename):
     """
     filename="C:\\Users\\dfeli\\Downloads\\Universidad Segundo Semestre\\Estructura De Datos Y Algoritmos\\Retos\\Reto 3\\Reto3-G02\\Data\\accidents-large.csv"
     input_file = csv.DictReader(open(filename, encoding="utf-8"))
+    astart_time = get_time()
     accidents_tree = catalog['accidents_tree']  # Obtener el árbol del catálogo
     accidents_list = catalog['accidents_list']["elements"]  # Obtener la lista del catálogo
 
@@ -92,8 +93,9 @@ def load_data(catalog, filename):
 
     first_five = accidents_list[:5]
     last_five = accidents_list[-5:]
-
-    return total_accidents, first_five, last_five
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    return total_accidents, first_five, last_five,delta
 pass
 
 # Funciones de consulta sobre el catálogo
@@ -180,6 +182,7 @@ def req_1(catalog, start_date_str, end_date_str):
     Lista los accidentes ocurridos entre dos fechas.
     """
     my_rbt = catalog['accidents_tree']
+    astart_time = get_time()
     # Convertir las fechas de entrada a objetos datetime
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d %H:%M:%S")
     end_date = datetime.strptime(end_date_str, "%Y-%m-%d %H:%M:%S")
@@ -218,14 +221,16 @@ def req_1(catalog, start_date_str, end_date_str):
     height = rbt.height_tree(my_rbt["root"])
     node_count = rbt.size_tree(my_rbt["root"])
     element_count = rbt.size_tree(my_rbt["root"])
-
-    return total_accidents, respuesta, height, node_count, element_count
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    return total_accidents, respuesta, height, node_count, element_count,delta
 
 
 
 def req_2(catalog, visibilidad_rango, lista_estados):
     
     min_visibilidad, max_visibilidad = visibilidad_rango
+    astart_time = get_time()
     accidentes_filtrados = al.new_list()
 
     # Filtrar los accidentes en el árbol dentro del rango de visibilidad y gravedad 4
@@ -289,10 +294,11 @@ def req_2(catalog, visibilidad_rango, lista_estados):
 
     # Ordenar los estados por cantidad de accidentes de mayor a menor
     analisis_estados_ordenado = sorted(analisis_estados, key=lambda x: x["Total Accidentes"], reverse=True)
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    return analisis_estados_ordenado,delta
 
-    return analisis_estados_ordenado
-
-    pass
+pass
 
 
 def req_3(catalog, n):
@@ -303,7 +309,9 @@ def req_3(catalog, n):
     my_rbt = catalog['accidents_tree']
 
     # Filtrar accidentes en el árbol con visibilidad < 2 millas y precipitaciones
+    astart_time = get_time()
     accidentes_filtrados = al.new_list()
+    
     search_tree(my_rbt, my_rbt["root"], datetime.min, datetime.max, accidentes_filtrados)
 
     # Seleccionar solo los accidentes que cumplen con los requisitos
@@ -334,8 +342,9 @@ def req_3(catalog, n):
     height = rbt.height_tree(my_rbt["root"])
     node_count = rbt.size_tree(my_rbt["root"])
     element_count = rbt.size_tree(my_rbt["root"])
-
-    return al.size(accidentes_validos), respuesta, height, node_count, element_count
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    return al.size(accidentes_validos), respuesta, height, node_count, element_count,delta
 
     pass
 
@@ -344,6 +353,7 @@ def req_4(catalog,start_date_str, end_date_str):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
+    astart_time = get_time()
     my_rbt = catalog['accidents_tree']
     # Convertir las fechas de entrada a objetos datetime
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d %H:%M:%S")
@@ -416,8 +426,9 @@ def req_4(catalog,start_date_str, end_date_str):
     height = rbt.height_tree(my_rbt["root"])
     node_count = rbt.size_tree(my_rbt["root"])
     element_count = rbt.size_tree(my_rbt["root"])
-   
-    return total_accidents, respuesta, height, node_count, element_count
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    return total_accidents, respuesta, height, node_count, element_count,delta
             
             
     
@@ -449,6 +460,7 @@ def count_accidents(my_rbt):
 
 def req_5(catalog, start_date_str, end_date_str, weather_conditions):
     # Obtiene el árbol de accidentes desde el control
+    astart_time = get_time()
     my_rbt = catalog['accidents_tree']
     
     # Convierte las cadenas de fecha a objetos datetime
@@ -526,9 +538,10 @@ def req_5(catalog, start_date_str, end_date_str, weather_conditions):
     height = rbt.height_tree(my_rbt["root"])  # Altura del árbol
     node_count = rbt.size_tree(my_rbt["root"])  # Conteo de nodos en el árbol
     element_count = rbt.size_tree(my_rbt["root"])  # Conteo de elementos en el árbol
-
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
     # Retorna los resultados, altura, conteo de nodos y conteo de elementos
-    return results, height, node_count, element_count
+    return results, height, node_count, element_count,delta
 
 def get_all_accidents(my_rbt):
     """
@@ -558,6 +571,7 @@ def req_6(catalog,start_date_str, end_date_str, humedad, lst_condados):
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
+    astart_time = get_time()
     my_rbt = catalog['accidents_tree']
     # Convertir las fechas de entrada a objetos datetime
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d %H:%M:%S")
@@ -645,8 +659,9 @@ def req_6(catalog,start_date_str, end_date_str, humedad, lst_condados):
     height = rbt.height_tree(my_rbt["root"])
     node_count = rbt.size_tree(my_rbt["root"])
     element_count = rbt.size_tree(my_rbt["root"])
-   
-    return total_accidents, respuesta, height, node_count, element_count
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
+    return total_accidents, respuesta, height, node_count, element_count,delta
         
         
          
@@ -691,10 +706,14 @@ def traverse_tree(node, min_lat, max_lat, min_long, max_long, accidents_in_range
                 "start_lat": start_lat,
                 "start_lng": start_lng
             }
-            accidents_in_range.append(accident_info)  # Agregar el accidente a la lista
+            # Agregar el accidente a la lista
+            accidents_in_range['elements'].append(accident_info)
+            # Incrementar el tamaño de la lista
+            accidents_in_range['size'] += 1
 
     # 3. Visitar el subárbol derecho
     traverse_tree(node['right'], min_lat, max_lat, min_long, max_long, accidents_in_range)
+
 
 
 def count_nodes_in_tree(node):
@@ -725,13 +744,14 @@ def req_7(catalog, min_lat, max_lat, min_long, max_long):
     - Diccionario con el total de accidentes en el rango y la lista de accidentes seleccionados.
     """
     # Lista para almacenar los accidentes encontrados en el rango
+    astart_time = get_time()
     accidents_in_range = al.new_list()
     
     # Obtener el árbol de accidentes desde el catálogo
     accidents_tree = catalog.get('accidents_tree')
     
     # Realizar el recorrido del árbol en busca de accidentes en el rango
-    traverse_tree(accidents_tree['root'], min_lat, max_lat, min_long, max_long, accidents_in_range["elements"])
+    traverse_tree(accidents_tree['root'], min_lat, max_lat, min_long, max_long, accidents_in_range)
     
     # Calcular el total de accidentes en el rango
     total_accidents_in_range = accidents_in_range["size"]
@@ -740,10 +760,12 @@ def req_7(catalog, min_lat, max_lat, min_long, max_long):
     selected_accidents = accidents_in_range["elements"][:5] if accidents_in_range else []
     
     # Retornar el total y la muestra de accidentes
+    aend_time = get_time()
+    delta = delta_time(astart_time, aend_time)
     return {
         "total_accidents_in_range": total_accidents_in_range,
         "accidents": selected_accidents
-    }
+    },delta
 
 
 
@@ -758,6 +780,7 @@ def req_8(catalog):
     Retorna el resultado del requerimiento 8
     """
     # TODO: Modificar el requerimiento 8
+    astart_time = get_time()
     
     pass
 

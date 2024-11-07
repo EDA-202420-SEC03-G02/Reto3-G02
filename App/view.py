@@ -31,7 +31,7 @@ def load_data(control):
     así como los cinco primeros y cinco últimos accidentes.
     """    
     print("Cargando información de los accidentes...")
-    total_accidents, first_five, last_five = lg.load_data(control, "accidents-large.csv")
+    total_accidents, first_five, last_five,time = lg.load_data(control, "accidents-large.csv")
 
     print(f"\nTotal de accidentes cargados: {total_accidents}")
     
@@ -40,7 +40,7 @@ def load_data(control):
     
     print("\nÚltimos cinco accidentes cargados:")
     display_accidents(last_five)
-
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
 def display_accidents(accidents):
     """
     Muestra la información requerida de un conjunto de accidentes en formato tabular.
@@ -70,7 +70,7 @@ def print_req_1(control):
     end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
     
     # Llamar a la función que obtiene la información de los accidentes
-    total_accidents, accidents_info, height, node_count, element_count = lg.req_1(control, start_date, end_date)
+    total_accidents, accidents_info, height, node_count, element_count,time = lg.req_1(control, start_date, end_date)
     
     # Imprimir el total de accidentes
     print(f"Total de accidentes en el intervalo de fechas: {total_accidents}")
@@ -124,7 +124,7 @@ def print_req_1(control):
 
         headers = ["ID", "Fecha y hora de inicio", "Ciudad y estado", "Descripción", "Duración"]
         print(tabulate(table, headers=headers, tablefmt="grid"))
-    
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     # Imprimir características del árbol
     print("Características del árbol:")
     print(f"Altura: {height}")
@@ -151,7 +151,7 @@ def print_req_2(control):
         return
 
     # Llamar a la función que obtiene la información de los accidentes
-    resultados = lg.req_2(control, visibilidad_rango, lista_estados)
+    resultados,time = lg.req_2(control, visibilidad_rango, lista_estados)
 
     # Imprimir el total de accidentes
     total_accidentes = sum(estado["Total Accidentes"] for estado in resultados)
@@ -187,7 +187,7 @@ def print_req_2(control):
         print("\nAccidente con mayor distancia afectada:")
         print(tabulate(table_accidente, headers=headers_accidente, tablefmt="grid"))
         print("-" * 80)
-
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     
 
     
@@ -200,7 +200,7 @@ def print_req_3(control):
     Función que imprime la solución del Requerimiento 3 en consola.
     """
     n = int(input("Ingrese el número N de accidentes a mostrar: "))
-    total_accidentes, respuesta, height, node_count, element_count = lg.req_3(control, n) 
+    total_accidentes, respuesta, height, node_count, element_count,time = lg.req_3(control, n) 
 
     # Imprimir total de accidentes encontrados
     print(f"Total de accidentes encontrados: {total_accidentes}")
@@ -231,7 +231,7 @@ def print_req_3(control):
     ]
     print("\nCaracterísticas del árbol rojo-negro:")
     print(tabulate(tree_stats, tablefmt="grid"))
-
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     
 
     pass
@@ -246,7 +246,7 @@ def print_req_4(control):
     end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
     
     # Llamar a la función que obtiene la información de las vías y accidentes
-    total_accidents, roads_info, height, node_count, element_count = lg.req_4(control, start_date, end_date)
+    total_accidents, roads_info, height, node_count, element_count,time = lg.req_4(control, start_date, end_date)
     
     # Verificar si se obtuvo información
     if not roads_info:
@@ -280,14 +280,15 @@ def print_req_4(control):
     ]
     
     # Imprimir la tabla
+    print("total accidentes:",total_accidents)
     print(tabulate(table, headers=headers, tablefmt="grid"))
-
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     # Imprimir características del árbol
     print("Características del árbol:")
     print(f"Altura: {height}")
     print(f"Número de nodos: {node_count}")
     print(f"Número de elementos: {element_count}")
-
+    
 
 
 
@@ -305,7 +306,7 @@ def print_req_5(control):
     weather_conditions = [condition.strip() for condition in weather_conditions_input.split(",")]
     
     # Llamar a la función que obtiene la información de los accidentes
-    results, height, node_count, element_count = lg.req_5(control, start_date, end_date, weather_conditions)
+    results, height, node_count, element_count,time = lg.req_5(control, start_date, end_date, weather_conditions)
     
     # Imprimir resultados en tabla
     print("\nResultados del Requerimiento 5:")
@@ -331,7 +332,7 @@ def print_req_5(control):
     ]
     print("\nCaracterísticas del árbol de accidentes:")
     print(tabulate(tree_stats, tablefmt="grid"))
-
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     
 
 
@@ -348,7 +349,7 @@ def print_req_6(control):
     lst_condados = input("Ingrese la lista de condados separados por comas: ").split(",")
     
     # Llamar a la función que obtiene la información de los accidentes
-    total_accidents, counties_info, height, node_count, element_count = lg.req_6(control, start_date, end_date, humedad, lst_condados)
+    total_accidents, counties_info, height, node_count, element_count,time = lg.req_6(control, start_date, end_date, humedad, lst_condados)
     
     # Verificar si se obtuvo información
     if not counties_info:
@@ -389,13 +390,13 @@ def print_req_6(control):
     
     # Imprimir la tabla
     print(tabulate(table, headers=headers, tablefmt="grid"))
-
+    print("total accidentes:",total_accidents)
     # Imprimir características del árbol
     print("Características del árbol:")
     print(f"Altura: {height}")
     print(f"Número de nodos: {node_count}")
     print(f"Número de elementos: {element_count}")
-
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
 
 
 
@@ -410,7 +411,7 @@ def print_req_7(control):
     max_long = float(input("Ingrese la longitud máxima: "))
     
     # Llamar a la función req_7 con los límites geográficos
-    result = lg.req_7(control, min_lat, max_lat, min_long, max_long)
+    result,time = lg.req_7(control, min_lat, max_lat, min_long, max_long)
     
     # Imprimir el conteo total de accidentes en el rango
     print("Total de accidentes en el rango geográfico:", result["total_accidents_in_range"])
@@ -434,7 +435,7 @@ def print_req_7(control):
     # Imprimir la tabla de accidentes
     print("\nLista de accidentes en el rango geográfico:")
     print(tabulate(accidents_table, headers=headers, tablefmt="grid"))
-
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     
 
 
