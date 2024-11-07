@@ -179,6 +179,7 @@ def req_1(catalog, start_date_str, end_date_str):
     Lista los accidentes ocurridos entre dos fechas.
     """
     my_rbt = catalog['accidents_tree']
+    start_time = get_time()
     # Convertir las fechas de entrada a objetos datetime
     start_date = datetime.strptime(start_date_str, "%Y-%m-%d %H:%M:%S")
     end_date = datetime.strptime(end_date_str, "%Y-%m-%d %H:%M:%S")
@@ -217,8 +218,9 @@ def req_1(catalog, start_date_str, end_date_str):
     height = rbt.height_tree(my_rbt["root"])
     node_count = rbt.size_tree(my_rbt["root"])
     element_count = rbt.size_tree(my_rbt["root"])
-
-    return total_accidents, respuesta, height, node_count, element_count
+    end_time = get_time()
+    delta = delta_time(start_time, end_time)
+    return total_accidents, respuesta, height, node_count, element_count,delta
 
 
 
@@ -226,7 +228,7 @@ def req_2(catalog, visibilidad_rango, lista_estados):
     
     min_visibilidad, max_visibilidad = visibilidad_rango
     accidentes_filtrados = array.new_list()
-
+    start_time = get_time()
     # Filtrar los accidentes en el árbol dentro del rango de visibilidad y gravedad 4
     search_tree(catalog['accidents_tree'], catalog['accidents_tree']["root"], datetime.min, datetime.max, accidentes_filtrados)
 
@@ -288,8 +290,9 @@ def req_2(catalog, visibilidad_rango, lista_estados):
 
     # Ordenar los estados por cantidad de accidentes de mayor a menor
     analisis_estados_ordenado = sorted(analisis_estados, key=lambda x: x["Total Accidentes"], reverse=True)
-
-    return analisis_estados_ordenado
+    end_time = get_time()
+    delta = delta_time(start_time, end_time)
+    return analisis_estados_ordenado,delta
 
     pass
 

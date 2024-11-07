@@ -70,7 +70,7 @@ def print_req_1(control):
     end_date = str(input("Ingrese la fecha final del período a consultar (formato %Y-%m-%d %H:%M:%S): "))
     
     # Llamar a la función que obtiene la información de los accidentes
-    total_accidents, accidents_info, height, node_count, element_count = lg.req_1(control, start_date, end_date)
+    total_accidents, accidents_info, height, node_count, element_count,time = lg.req_1(control, start_date, end_date)
     
     # Imprimir el total de accidentes
     print(f"Total de accidentes en el intervalo de fechas: {total_accidents}")
@@ -95,6 +95,7 @@ def print_req_1(control):
         
         headers = ["ID", "Fecha y hora de inicio", "Ciudad y estado", "Descripción", "Duración"]
         print(tabulate(table_first_five, headers=headers, tablefmt="grid"))
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
 
         # Tabla para los últimos 5 accidentes
         print("\nÚltimos 5 accidentes:")
@@ -109,6 +110,7 @@ def print_req_1(control):
             ])
         
         print(tabulate(table_last_five, headers=headers, tablefmt="grid"))
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     else:
         # Si hay 10 o menos accidentes, imprimir todos en una sola tabla
         print("Lista de accidentes:")
@@ -124,6 +126,7 @@ def print_req_1(control):
 
         headers = ["ID", "Fecha y hora de inicio", "Ciudad y estado", "Descripción", "Duración"]
         print(tabulate(table, headers=headers, tablefmt="grid"))
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
     
     # Imprimir características del árbol
     print("Características del árbol:")
@@ -151,7 +154,7 @@ def print_req_2(control):
         return
 
     # Llamar a la función que obtiene la información de los accidentes
-    resultados = lg.req_2(control, visibilidad_rango, lista_estados)
+    resultados,time = lg.req_2(control, visibilidad_rango, lista_estados)
 
     # Imprimir el total de accidentes
     total_accidentes = sum(estado["Total Accidentes"] for estado in resultados)
@@ -172,6 +175,7 @@ def print_req_2(control):
         ]
         headers_estado = ["Total Accidentes", "Visibilidad Promedio", "Distancia Promedio"]
         print(tabulate(table_estado, headers=headers_estado, tablefmt="grid"))
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
 
         # Información del accidente con mayor distancia afectada
         accidente_mayor_distancia = estado["Accidente Mayor Distancia"]
@@ -186,6 +190,7 @@ def print_req_2(control):
         headers_accidente = ["ID", "Fecha de Inicio", "Visibilidad", "Distancia Afectada"]
         print("\nAccidente con mayor distancia afectada:")
         print(tabulate(table_accidente, headers=headers_accidente, tablefmt="grid"))
+        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
         print("-" * 80)
 
     print("Fin del análisis")
