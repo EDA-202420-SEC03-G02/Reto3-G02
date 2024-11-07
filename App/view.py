@@ -124,12 +124,13 @@ def print_req_1(control):
 
         headers = ["ID", "Fecha y hora de inicio", "Ciudad y estado", "Descripción", "Duración"]
         print(tabulate(table, headers=headers, tablefmt="grid"))
-        print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
+        
     # Imprimir características del árbol
     print("Características del árbol:")
     print(f"Altura: {height}")
     print(f"Número de nodos: {node_count}")
     print(f"Número de elementos: {element_count}")
+    print("Tiempo de ejecución:", f"{time:.3f}", "[ms]")
 pass
 
 

@@ -22,7 +22,7 @@ def load_data(catalog, filename):
     """
     Carga los datos del reto
     """
-    filename="C:\\EDA20242\\Reto3-G02\\Data\\Data\\Data\\accidents-large.csv"
+    filename="C:\\Users\\dfeli\\Downloads\\Universidad Segundo Semestre\\Estructura De Datos Y Algoritmos\\Retos\\Reto 3\\Reto3-G02\\Data\\accidents-large.csv"#"C:\\EDA20242\\Reto3-G02\\Data\\Data\\Data\\accidents-large.csv"
     #"C:\\Users\\dfeli\\Downloads\\Universidad Segundo Semestre\\Estructura De Datos Y Algoritmos\\Retos\\Reto 3\\Reto3-G02\\Data\\accidents-large.csv"
     input_file = csv.DictReader(open(filename, encoding="utf-8"))
     astart_time = get_time()
@@ -182,6 +182,7 @@ def req_1(catalog, start_date_str, end_date_str):
     """
     Lista los accidentes ocurridos entre dos fechas.
     """
+    astart_time = get_time()
     my_rbt = catalog['accidents_tree']
     astart_time = get_time()
     # Convertir las fechas de entrada a objetos datetime
